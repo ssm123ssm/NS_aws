@@ -127,7 +127,7 @@ def upload_file():
     reporter.creator(reporter_store)
 
     input_html_file = 'reports/report_new.html'
-    output_pdf_file = 'UI/public/s.pdf'
+    output_pdf_file = 'reports/s.pdf'
     #open_html_file(input_html_file)
 
    # html_file_to_pdf(input_html_file, output_pdf_file)

@@ -167,7 +167,7 @@ def serve_pdf():
         return jsonify({'error': str(e)}), 500
     
 @app.route('/html', methods=['GET'])
-def serve_pdf():
+def serve_html():
     try:
         pdf_path = 'reports/report_new.html'
         return send_file(pdf_path, as_attachment=True)

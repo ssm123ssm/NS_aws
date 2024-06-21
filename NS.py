@@ -7,6 +7,7 @@ from custom import *
 from dotenv import load_dotenv
 import os
 import shutil
+from weasyprint import HTML
 
 load_dotenv()
 openai_embeddings = Embedding(model_type='openai')
@@ -125,21 +126,22 @@ def upload_file():
     reporter_store[4] = ((result_obj_tester_risks['result']))
 
     reporter.creator(reporter_store)
-
-    input_html_file = 'reports/report_new.html'
-    output_pdf_file = 'reports/s.pdf'
     #open_html_file(input_html_file)
 
    # html_file_to_pdf(input_html_file, output_pdf_file)
-    import subprocess
 
-    def print_to_pdf(input_file, output_file):
+    def html_to_pdf(input_file, output_file):
         try:
-            subprocess.run(['wkhtmltopdf', input_file, output_pdf_file])
+            HTML(input_file).write_pdf(output_file)
             print(f'PDF created successfully at: {output_file}')
         except Exception as e:
             print(f'Error creating PDF: {e}')
-    print_to_pdf(input_html_file, output_pdf_file)
+
+    input_html_file = 'reports/report_new.html'
+    output_pdf_file = 'reports/s.pdf'
+
+    html_to_pdf(input_html_file, output_pdf_file)
+
     return jsonify({'message': 'Files uploaded successfully'})
 
 

@@ -18,4 +18,5 @@ markdown
 python-dotenv
 pillow_heif
 libgl1
+weasyprint
 

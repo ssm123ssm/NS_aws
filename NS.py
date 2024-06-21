@@ -2,7 +2,7 @@ import importlib
 import reporter
 import reporter_comps
 from flask_cors import CORS  # Import the CORS module
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_file
 from custom import *
 from dotenv import load_dotenv
 import os

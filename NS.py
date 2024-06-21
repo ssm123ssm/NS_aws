@@ -165,6 +165,14 @@ def serve_pdf():
         return send_file(pdf_path, as_attachment=True)
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+    
+@app.route('/html', methods=['GET'])
+def serve_pdf():
+    try:
+        pdf_path = 'reports/report_new.html'
+        return send_file(pdf_path, as_attachment=True)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=150)

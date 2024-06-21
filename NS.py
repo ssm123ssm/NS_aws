@@ -158,6 +158,13 @@ def chat():
 
     return jsonify({'reply': reply})
 
+@app.route('/pdf', methods=['GET'])
+def serve_pdf():
+    try:
+        pdf_path = 'reports/s.pdf'
+        return send_file(pdf_path, as_attachment=True)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=150)

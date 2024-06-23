@@ -4,7 +4,12 @@ import markdown
 
 def creator(info):
 
-    date = datetime.datetime.now().strftime("%I:%M%p on %B %d, %Y")
+    now = datetime.datetime.now()
+    delta = datetime.timedelta(hours=5, minutes=30)
+    new_time = now + delta
+    formatted_time = new_time.strftime("%I:%M%p on %B %d, %Y")
+
+    date = formatted_time
     summary = markdown.markdown(info[0])
     stats_1_1 = markdown.markdown(info[1])
     stats_1_2 = markdown.markdown(info[2])

@@ -62,6 +62,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 app.config['vs'] = None
 app.config['user_vars_1'] = None
+app.config['user_vars_2'] = None
 
 
 @app.route('/upload', methods=['POST'])
@@ -93,8 +94,12 @@ def upload_file():
 
     query_chain = Chain(retriever=Retriever(vectorstore=vs, k=3), llm=llm_2,
                         persona=persona, template=reporter_comps.component().tester_template_balance_sheet_1_2)
+    
+    query_chain_2 = Chain(retriever=Retriever(vectorstore=vs, k=3), llm=llm_2,
+                        persona=Persona(personality_type='explainer'), template=reporter_comps.component().tester_template_balance_sheet_1_2)
 
     app.config['user_vars_1'] = query_chain
+    app.config['user_vars_2'] = query_chain_2
 
     print("Stage 1")
     result_obj_tester_summary = main_chain.con_qa(
@@ -153,7 +158,7 @@ def chat():
     message = data.get('message', '')
     print(message)
 
-    result_obj = app.config['user_vars_1'].con_qa(inputs={"query": message})
+    result_obj = app.config['user_vars_2'].con_qa(inputs={"query": message})
     reply = result_obj['result']
 
     return jsonify({'reply': reply})

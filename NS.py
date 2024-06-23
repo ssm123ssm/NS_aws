@@ -42,8 +42,6 @@ def cleanup():
         print(f"The '{down_folder}' folder does not exist.")
 
 
-cleanup()
-
 app = Flask(__name__)
 CORS(app)
 
@@ -53,6 +51,8 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['vs'] = None
 app.config['user_vars_1'] = None
 app.config['user_vars_2'] = None
+
+cleanup()
 
 
 @app.route('/upload', methods=['POST'])

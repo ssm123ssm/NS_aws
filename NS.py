@@ -24,6 +24,10 @@ def cleanup():
     print("Cleaning up resources...")
     down_folder = "down"
 
+    app.config['vs'] = None
+    app.config['user_vars_1'] = None
+    app.config['user_vars_2'] = None
+
     if os.path.exists(down_folder):
         for filename in os.listdir(down_folder):
             file_path = os.path.join(down_folder, filename)
@@ -36,20 +40,6 @@ def cleanup():
                 print(f"Failed to remove {file_path}. Reason: {e}")
     else:
         print(f"The '{down_folder}' folder does not exist.")
-
-
-def open_html_file(file_name):
-    import subprocess
-    import os
-
-    current_dir = os.getcwd()
-    html_file = os.path.join(current_dir, file_name)
-    print(f"Opening file: {html_file}")
-
-    if os.path.isfile(html_file):
-        subprocess.call(['open', html_file])
-    else:
-        print(f"Error: File '{html_file}' not found.")
 
 
 cleanup()
@@ -68,6 +58,7 @@ app.config['user_vars_2'] = None
 @app.route('/upload', methods=['POST'])
 def upload_file():
 
+    cleanup()
     chunk = 3000
     chunk_overlap = 800
     k = 8
@@ -94,9 +85,9 @@ def upload_file():
 
     query_chain = Chain(retriever=Retriever(vectorstore=vs, k=3), llm=llm_2,
                         persona=persona, template=reporter_comps.component().tester_template_balance_sheet_1_2)
-    
+
     query_chain_2 = Chain(retriever=Retriever(vectorstore=vs, k=3), llm=llm_2,
-                        persona=Persona(personality_type='explainer'), template=reporter_comps.component().tester_template_balance_sheet_1_2)
+                          persona=Persona(personality_type='explainer'), template=reporter_comps.component().tester_template_balance_sheet_1_2)
 
     app.config['user_vars_1'] = query_chain
     app.config['user_vars_2'] = query_chain_2
@@ -131,9 +122,6 @@ def upload_file():
     reporter_store[4] = ((result_obj_tester_risks['result']))
 
     reporter.creator(reporter_store)
-    #open_html_file(input_html_file)
-
-   # html_file_to_pdf(input_html_file, output_pdf_file)
 
     def html_to_pdf(input_file, output_file):
         try:
@@ -163,6 +151,7 @@ def chat():
 
     return jsonify({'reply': reply})
 
+
 @app.route('/pdf', methods=['GET'])
 def serve_pdf():
     try:
@@ -170,7 +159,8 @@ def serve_pdf():
         return send_file(pdf_path, as_attachment=True)
     except Exception as e:
         return jsonify({'error': str(e)}), 500
-    
+
+
 @app.route('/html', methods=['GET'])
 def serve_html():
     try:
@@ -178,6 +168,7 @@ def serve_html():
         return send_file(pdf_path, as_attachment=True)
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=150)
